@@ -17,21 +17,18 @@ atividade_transferencia_erc20_por_carteira = eth.get_erc20_token_transfer_events
     sort=sort
 )
 
+### OTIMIZANDO OS DADOS ###
 # Setando em um DataFrame
 carteira_erc20_completa = pd.DataFrame(atividade_transferencia_erc20_por_carteira)
-
 # Setando coluna timestamp
 carteira_erc20_completa['timeStamp'] = pd.to_datetime(carteira_erc20_completa['timeStamp'], unit='s')
-
 # Selecionando somente colunas de interesse
-carteira_erc20 = carteira_erc20_completa[['tokenName', 'tokenSymbol',
-                                          'contractAddress', 'timeStamp', 'from', 'to', 'value']]
-
+carteira_erc20 = carteira_erc20_completa[['tokenName', 'tokenSymbol', 'contractAddress', 'timeStamp', 'from', 'to', 'value']]
 # carteira_erc20['value'] = carteira_erc20['value'].astype(float)
 carteira_erc20 = carteira_erc20.assign(value=carteira_erc20['value'].str.replace(',', '.').astype(float))
 
 
-# PESQUISA DE HISTORICO DE MOEDAS/ENDEREÇOS ERC20 TRANSACIONADOS PELA CARTEIRA SELECIONADA SETADA PELO ENDEREÇO DE CONTRATO
+#  FUNÇÃO: PESQUISA DE HISTORICO DE MOEDAS/ENDEREÇOS ERC20 TRANSACIONADOS PELA CARTEIRA SELECIONADA SETADA PELO ENDEREÇO DE CONTRATO
 # realizar uma pesquisa de endereços de moedas e verificar as transações realizadas pela carteira referente.
 def filtro_contrato():
 
