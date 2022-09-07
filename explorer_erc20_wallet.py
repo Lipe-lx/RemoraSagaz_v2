@@ -31,12 +31,29 @@ carteira_erc20 = carteira_erc20.assign(value=carteira_erc20['value'].str.replace
 #  FUNÇÃO: PESQUISA DE HISTORICO DE MOEDAS/ENDEREÇOS ERC20 TRANSACIONADOS PELA CARTEIRA SELECIONADA SETADA PELO ENDEREÇO DE CONTRATO
 # realizar uma pesquisa de endereços de moedas e verificar as transações realizadas pela carteira referente.
 def filtro_contrato():
-
     carteira_erc20_filtrado = carteira_erc20.copy()
     carteira_erc20_filtrado = carteira_erc20_filtrado.set_index('contractAddress')
 
     e_address = str(input())
     filtro = carteira_erc20_filtrado.loc[e_address]
-    return print(filtro)
 
+    ft = filtro.copy()
+    #print(ft['to'])
+
+#    if address in ft['to']:
+#        ft['status'] = 'BUY'
+#    else:
+#        ft['status'] = 'SELL'
+#    return print(ft)
+
+    for row in ft.iterrows():
+        if address in ft['to']:
+            ft['status'] = 'BUY'
+        else:
+            ft['status'] = 'SELL'
+    return print(ft)
 filtro_contrato()
+
+
+#Fazer coluna de compra e venda no DF - Todas as transações 'to' para a carteira de referencia entao é compra, para uma carteira diferente é venda
+
