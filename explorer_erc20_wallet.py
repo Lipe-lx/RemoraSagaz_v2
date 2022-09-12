@@ -1,6 +1,7 @@
 from config import database_infos
 from etherscan import Etherscan
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 eth = Etherscan(api_key=database_infos['api_key'])
@@ -10,6 +11,7 @@ startblock = 0
 endblock = 999999999
 sort = 'asc'
 
+###CHAMADA DO DB####
 atividade_transferencia_erc20_por_carteira = eth.get_erc20_token_transfer_events_by_address(
     address=address,
     startblock=startblock,
@@ -38,20 +40,16 @@ def filtro_contrato():
     filtro = carteira_erc20_filtrado.loc[e_address]
 
     ft = filtro.copy()
-    #print(ft['to'])
+    ft_2 = ft.copy()
+    ft_2['carteira'] = address
 
-#    if address in ft['to']:
-#        ft['status'] = 'BUY'
-#    else:
-#        ft['status'] = 'SELL'
-#    return print(ft)
+    ft_2['status'] = ft_2.apply(lambda row: row['carteira'] == row['to'], axis=1).astype(int)
+    ft_2['status'] = np.where(ft_2['status'], 'BUY', 'SELL')
 
-    for row in ft.iterrows():
-        if address in ft['to']:
-            ft['status'] = 'BUY'
-        else:
-            ft['status'] = 'SELL'
-    return print(ft)
+
+    #ft_2['status'] = ft_2['status'].replace(False, 'SELL', inplace=True)
+    print(ft_2)
+
 filtro_contrato()
 
 
